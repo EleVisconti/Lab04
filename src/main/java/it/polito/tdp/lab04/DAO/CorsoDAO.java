@@ -11,7 +11,7 @@ import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Studente;
 
 public class CorsoDAO {
-	
+	List <Studente> studenti = new LinkedList<Studente>();
 	/*
 	 * Ottengo tutti i corsi salvati nel Db
 	 */
@@ -38,6 +38,9 @@ public class CorsoDAO {
 
 				// Crea un nuovo JAVA Bean Corso
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
+				
+				Corso c = new Corso(codins, numeroCrediti, nome, periodoDidattico);
+				corsi.add(c);
 			}
 
 			conn.close();
@@ -62,8 +65,39 @@ public class CorsoDAO {
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(String codins) {
+		 List<String> matricole = new LinkedList <String>();
+		 List<Studente> studenti = new LinkedList <Studente>();
+		 
+		final String sql = "SELECT i.matricola, s.cognome, s.nome, s.CDS "
+				+ "FROM iscrizione i, corso c, studente s "
+				+ "WHERE i.codins=c.codins AND i.matricola=s.matricola";
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+
+				String matricola = rs.getString("matricola");
+				String cognome = rs.getString("cognome");
+				String nome = rs.getString("nome");
+				String CDS = rs.getString("CDS");
+                matricole.add(matricola);
+                Studente s = new Studente(matricola, cognome, nome, CDS);
+                studenti.add(s);
+			}
+
+			conn.close();
+			
+			return studenti;
+			} catch (SQLException e) {
+				// e.printStackTrace();
+				throw new RuntimeException("Errore Db", e);
+			}
+       
 	}
 
 	/*
