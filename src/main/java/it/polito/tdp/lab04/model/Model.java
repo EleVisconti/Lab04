@@ -33,4 +33,12 @@ public class Model {
 	public boolean studenteIscritto(String matr, String codins) {
 		return this.studenteDAO.studenteIscritto(matr, codins);
 	}
+	
+	public boolean inscriviStudenteACorso(String matr, String codins) {
+		if(this.studenteIscritto(matr, codins)==false) {
+			return this.corsoDAO.inscriviStudenteACorso(matr, codins);
+		}
+		return false;
+	}
+	
 }

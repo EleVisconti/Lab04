@@ -67,11 +67,15 @@ public class FXMLController {
     	 txtResult.setText("Studente già iscritto a questo corso");
      else
     	 txtResult.setText("Studente non iscritto a questo corso");
+         boolean iscritto = model.inscriviStudenteACorso(txtMatricola.getText(), cmbCorso.getValue());
+         if(iscritto)
+        	 txtResult.setText("Studente appena iscritto a questo corso"); 
     }
 
     @FXML
     void reset(ActionEvent event) {
-
+     txtResult.clear();
+     txtMatricola.clear();
     }
     
     @FXML
